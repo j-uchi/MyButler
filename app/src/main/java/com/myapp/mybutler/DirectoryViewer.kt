@@ -101,51 +101,51 @@ class DirectoryViewer : Fragment() {
         //f_listの件数分ループする
         for(i in f_list.indices){
 
-            if(f_list[i]=="rList")break
-
-            //f_list[i]がtxtだった場合
-            if(f_list[i].lastIndexOf(".txt")!=-1){
-                layoutInflater.inflate(R.layout.layout_file,SV)
-                val layout=SV.getChildAt(count)as ConstraintLayout
-                count++
-                layout.tag = count
-                (layout.getChildAt(1)as TextView).text=adjustLength(hideExtention(f_list[i]))
-                layout.setOnClickListener{
+            if(f_list[i]!="rList"){
+                //f_list[i]がtxtだった場合
+                if(f_list[i].lastIndexOf(".txt")!=-1){
+                    layoutInflater.inflate(R.layout.layout_file,SV)
+                    val layout=SV.getChildAt(count)as ConstraintLayout
+                    count++
+                    layout.tag = count
+                    (layout.getChildAt(1)as TextView).text=adjustLength(hideExtention(f_list[i]))
+                    layout.setOnClickListener{
+                    }
+                    layout.setOnLongClickListener{
+                        CreateOptionDialog(f_list[i])
+                        true
+                    }
                 }
-                layout.setOnLongClickListener{
-                    CreateOptionDialog(f_list[i])
-                    true
+                //f_list[i]がpngだった場合
+                else if(f_list[i].lastIndexOf(".png")!=-1){
+                    layoutInflater.inflate(R.layout.layout_picture,SV)
+                    val layout=SV.getChildAt(count)as ConstraintLayout
+                    count++
+                    layout.tag = count
+                    val image: Bitmap =BitmapFactory.decodeFile(context?.filesDir.toString()+args.DIRECTORY+"/"+f_list[i])
+                    (layout.getChildAt(0)as ImageView).setImageBitmap(image)
+                    layout.setOnClickListener{
+                    }
+                    layout.setOnLongClickListener{
+                        CreateOptionDialog(f_list[i])
+                        true
+                    }
                 }
-            }
-            //f_list[i]がpngだった場合
-            else if(f_list[i].lastIndexOf(".png")!=-1){
-                layoutInflater.inflate(R.layout.layout_picture,SV)
-                val layout=SV.getChildAt(count)as ConstraintLayout
-                count++
-                layout.tag = count
-                val image: Bitmap =BitmapFactory.decodeFile(context?.filesDir.toString()+args.DIRECTORY+"/"+f_list[i])
-                (layout.getChildAt(0)as ImageView).setImageBitmap(image)
-                layout.setOnClickListener{
-                }
-                layout.setOnLongClickListener{
-                    CreateOptionDialog(f_list[i])
-                    true
-                }
-            }
-            //f_list[i]がfolderだった場合
-            else{
-                layoutInflater.inflate(R.layout.layout_folder,SV)
-                val layout=SV.getChildAt(count)as ConstraintLayout
-                count++
-                layout.tag = count
-                (layout.getChildAt(1)as TextView).text=adjustLength(hideExtention(f_list[i]))
-                layout.setOnClickListener{
-                    val action=DirectoryViewerDirections.actionDirectoryViewerSelf(args.DIRECTORY+"/"+f_list[i])
-                    findNavController().navigate(action)
-                }
-                layout.setOnLongClickListener{
-                    CreateOptionDialog(f_list[i])
-                    true
+                //f_list[i]がfolderだった場合
+                else{
+                    layoutInflater.inflate(R.layout.layout_folder,SV)
+                    val layout=SV.getChildAt(count)as ConstraintLayout
+                    count++
+                    layout.tag = count
+                    (layout.getChildAt(1)as TextView).text=adjustLength(hideExtention(f_list[i]))
+                    layout.setOnClickListener{
+                        val action=DirectoryViewerDirections.actionDirectoryViewerSelf(args.DIRECTORY+"/"+f_list[i])
+                        findNavController().navigate(action)
+                    }
+                    layout.setOnLongClickListener{
+                        CreateOptionDialog(f_list[i])
+                        true
+                    }
                 }
             }
         }
