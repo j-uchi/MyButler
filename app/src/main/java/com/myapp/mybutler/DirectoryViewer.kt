@@ -2,12 +2,15 @@ package com.myapp.mybutler
 
 import android.app.AlertDialog
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -51,7 +54,7 @@ class DirectoryViewer : Fragment() {
             CreateFileDialog()
         }
         view.findViewById<FloatingActionButton>(R.id.fab_picture).setOnClickListener{
-            _activityListener?.openGallery()
+            _activityListener?.openGallery(context?.filesDir.toString()+args.DIRECTORY)
         }
 
     }
@@ -66,7 +69,7 @@ class DirectoryViewer : Fragment() {
     }
 
     interface OnActivityListener{
-        fun openGallery()
+        fun openGallery(dir:String)
     }
 
     override fun onResume(){
@@ -97,6 +100,9 @@ class DirectoryViewer : Fragment() {
 
         //f_listの件数分ループする
         for(i in f_list.indices){
+
+            if(f_list[i]=="rList")break
+
             //f_list[i]がtxtだった場合
             if(f_list[i].lastIndexOf(".txt")!=-1){
                 layoutInflater.inflate(R.layout.layout_file,SV)
@@ -113,7 +119,18 @@ class DirectoryViewer : Fragment() {
             }
             //f_list[i]がpngだった場合
             else if(f_list[i].lastIndexOf(".png")!=-1){
-
+                layoutInflater.inflate(R.layout.layout_picture,SV)
+                val layout=SV.getChildAt(count)as ConstraintLayout
+                count++
+                layout.tag = count
+                val image: Bitmap =BitmapFactory.decodeFile(context?.filesDir.toString()+args.DIRECTORY+"/"+f_list[i])
+                (layout.getChildAt(0)as ImageView).setImageBitmap(image)
+                layout.setOnClickListener{
+                }
+                layout.setOnLongClickListener{
+                    CreateOptionDialog(f_list[i])
+                    true
+                }
             }
             //f_list[i]がfolderだった場合
             else{

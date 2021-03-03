@@ -1,15 +1,21 @@
 package com.myapp.mybutler
 
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.Bitmap.CompressFormat
 import android.graphics.BitmapFactory
 import android.os.Bundle
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
-import androidx.appcompat.app.AppCompatActivity
+import android.os.SystemClock
 import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
+import java.io.File
+import java.io.FileOutputStream
+
 
 class MainActivity : AppCompatActivity(),DirectoryViewer.OnActivityListener {
+
+    private var imageDirectory:String=""
 
     companion object{
         private const val READ_REQUEST_CODE:Int=12
@@ -37,27 +43,41 @@ class MainActivity : AppCompatActivity(),DirectoryViewer.OnActivityListener {
         }
     }
 
-    override fun openGallery() {
+    override fun openGallery(dir: String) {
         val intent= Intent(Intent.ACTION_OPEN_DOCUMENT).apply{
             addCategory(Intent.CATEGORY_OPENABLE)
             type="image/*"
         }
+        imageDirectory=dir
         startActivityForResult(intent, READ_REQUEST_CODE)
     }
 
-    override fun onActivityResult(requestCode:Int,resultCode:Int,resultData:Intent?){
+    override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?){
         super.onActivityResult(requestCode, resultCode, resultData)
 
         if(resultCode!=RESULT_OK)return
 
         when(requestCode){
-            READ_REQUEST_CODE->{
-                resultData?.data?.also{
-                    val inputStream=contentResolver.openInputStream(it)
-                    val image=BitmapFactory.decodeStream(inputStream)
+            READ_REQUEST_CODE -> {
+                resultData?.data?.also {
+                    val inputStream = contentResolver.openInputStream(it)
+                    OutputImage(BitmapFactory.decodeStream(inputStream))
                 }
             }
         }
 
     }
+
+    fun OutputImage(image: Bitmap){
+        if(imageDirectory=="")return
+
+        val time:String= SystemClock.uptimeMillis().toString()
+
+        val file = File("$imageDirectory/$time.png")
+        val outStream = FileOutputStream(file)
+        image.compress(CompressFormat.PNG, 100, outStream)
+        outStream.close()
+        imageDirectory=""
+    }
+
 }
