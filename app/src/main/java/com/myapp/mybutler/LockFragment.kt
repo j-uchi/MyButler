@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.addCallback
+import androidx.navigation.fragment.findNavController
 import java.lang.ClassCastException
 
 class LockFragment : Fragment() {
@@ -21,11 +22,11 @@ class LockFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_lock, container, false)
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _activityListener?.onUnlockDialog()
         requireActivity().onBackPressedDispatcher.addCallback(this){
-
         }
     }
 

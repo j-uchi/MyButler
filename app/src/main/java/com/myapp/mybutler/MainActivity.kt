@@ -1,5 +1,6 @@
 package com.myapp.mybutler
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Bitmap.CompressFormat
@@ -38,10 +39,18 @@ class MainActivity : AppCompatActivity(),DirectoryViewer.OnActivityListener,Lock
         setSupportActionBar(findViewById(R.id.toolbar))
     }
 
-    override fun onResume(){
-        super.onResume()
+    override fun onStart(){
+        super.onStart()
         Handler(Looper.getMainLooper()).post{
             findNavController(R.id.nav_host_fragment).navigate(R.id.LockFragment)
+        }
+    }
+
+    @SuppressLint("RestrictedApi")
+    override fun onPause(){
+        super.onPause()
+        while(findNavController(R.id.nav_host_fragment).currentDestination?.label.toString()=="lock_fragment_label"){
+            findNavController(R.id.nav_host_fragment).popBackStack()
         }
     }
 
@@ -103,18 +112,14 @@ class MainActivity : AppCompatActivity(),DirectoryViewer.OnActivityListener,Lock
         val callback = object : BiometricPrompt.AuthenticationCallback() {
             override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
                 super.onAuthenticationError(errorCode, errString)
-                Toast.makeText(
-                        applicationContext,
-                        "Authentication error: $errString", Toast.LENGTH_SHORT
-                ).show()
+                Handler(Looper.getMainLooper()).post{
+                    findNavController(R.id.nav_host_fragment).popBackStack()
+                    findNavController(R.id.nav_host_fragment).navigate(R.id.LockFragment)
+                }
             }
 
             override fun onAuthenticationFailed() {
                 super.onAuthenticationFailed()
-                Toast.makeText(
-                        applicationContext, "Authentication failed",
-                        Toast.LENGTH_SHORT
-                ).show()
             }
 
             override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {

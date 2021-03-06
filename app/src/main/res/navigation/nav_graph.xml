@@ -39,15 +39,23 @@
         <action
             android:id="@+id/action_DirectoryViewer_to_LockFragment"
             app:destination="@id/LockFragment" />
+        <action
+            android:id="@+id/action_DirectoryViewer_to_FileViewer"
+            app:destination="@id/FileViewer" />
     </fragment>
     <fragment
         android:id="@+id/LockFragment"
         android:name="com.myapp.mybutler.LockFragment"
+        android:label="@string/lock_fragment_label"
+        tools:layout="@layout/fragment_lock"/>
+    <fragment
+        android:id="@+id/FileViewer"
+        android:name="com.myapp.mybutler.FileViewer"
         android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_lock">
-        <action
-            android:id="@+id/action_LockFragment_to_DirectoryViewer"
-            app:destination="@id/DirectoryViewer" />
+        tools:layout="@layout/fragment_fileviewer">
+        <argument
+            android:name="DIRECTORY"
+            app:argType="string"/>
     </fragment>
     <argument
         android:name="DIRECTORY"

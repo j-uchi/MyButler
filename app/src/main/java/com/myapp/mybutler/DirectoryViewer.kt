@@ -111,6 +111,8 @@ class DirectoryViewer : Fragment() {
                     layout.tag = count
                     (layout.getChildAt(1)as TextView).text=adjustLength(hideExtention(f_list[i]))
                     layout.setOnClickListener{
+                        val action=DirectoryViewerDirections.actionDirectoryViewerToFileViewer(args.DIRECTORY+"/"+f_list[i])
+                        findNavController().navigate(action)
                     }
                     layout.setOnLongClickListener{
                         CreateOptionDialog(f_list[i])
@@ -154,10 +156,11 @@ class DirectoryViewer : Fragment() {
 
     fun adjustLength(str:String):String{
         var filename:String=str
-        if(filename.length>14){
-            filename=filename.substring(0,14)
+        if(filename.length>12){
+            filename=filename.substring(0,12)
             filename+="…"
         }
+        filename=filename.replace("\n"," ")
         return filename
     }
 
