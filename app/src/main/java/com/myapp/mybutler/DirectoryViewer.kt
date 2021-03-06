@@ -14,6 +14,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -42,7 +43,7 @@ class DirectoryViewer : Fragment() {
         view.findViewById<TextView>(R.id.txtDir).text=args.DIRECTORY
 
         view.findViewById<FloatingActionButton>(R.id.fab_add).setOnClickListener{
-
+            findNavController().navigate(R.id.action_DirectoryViewer_to_LockFragment)
         }
         view.findViewById<FloatingActionButton>(R.id.fab_close).setOnClickListener{
 

@@ -36,6 +36,18 @@
         <argument
             android:name="DIRECTORY"
             app:argType="string"/>
+        <action
+            android:id="@+id/action_DirectoryViewer_to_LockFragment"
+            app:destination="@id/LockFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/LockFragment"
+        android:name="com.myapp.mybutler.LockFragment"
+        android:label="@string/second_fragment_label"
+        tools:layout="@layout/fragment_lock">
+        <action
+            android:id="@+id/action_LockFragment_to_DirectoryViewer"
+            app:destination="@id/DirectoryViewer" />
     </fragment>
     <argument
         android:name="DIRECTORY"
