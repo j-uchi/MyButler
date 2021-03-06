@@ -123,6 +123,7 @@ class MainActivity : AppCompatActivity(),DirectoryViewer.OnActivityListener,Lock
                         applicationContext,
                         "Authentication succeeded!", Toast.LENGTH_SHORT
                 ).show()
+                findNavController(R.id.nav_host_fragment).popBackStack()
             }
         }
         biometricPrompt = BiometricPrompt(this, executor, callback)
